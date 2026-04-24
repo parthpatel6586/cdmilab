@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Users, Monitor, CheckCircle, AlertTriangle, Clock, FileDown } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const { data } = await axios.get('/api/dashboard/analytics');
+      const { data } = await api.get('/api/dashboard/analytics');
       setAnalytics(data);
     } catch (error) {
       toast.error('Failed to load dashboard data');
@@ -24,7 +24,7 @@ const Dashboard = () => {
 
   const exportReport = async () => {
     try {
-      const response = await axios.get('/api/dashboard/export', { responseType: 'blob' });
+      const response = await api.get('/api/dashboard/export', { responseType: 'blob' });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;

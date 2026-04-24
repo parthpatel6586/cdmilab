@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Database, ChevronRight, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -17,7 +17,7 @@ const LabManagement = () => {
 
   const fetchLabs = async () => {
     try {
-      const { data } = await axios.get('/api/labs');
+      const { data } = await api.get('/api/labs');
       setLabs(data);
     } catch (error) {
       toast.error('Failed to load labs');
@@ -29,7 +29,7 @@ const LabManagement = () => {
   const handleCreateLab = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/labs', newLab);
+      await api.post('/api/labs', newLab);
       toast.success('Lab created successfully');
       setShowModal(false);
       setNewLab({ name: '', description: '', totalPCs: 25 });

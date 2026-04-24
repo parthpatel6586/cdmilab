@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Clock } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -13,7 +13,7 @@ const ActivityLogs = () => {
 
   const fetchLogs = async () => {
     try {
-      const { data } = await axios.get('/api/dashboard/analytics');
+      const { data } = await api.get('/api/dashboard/analytics');
       setLogs(data.recentActivity || []);
     } catch (error) {
       toast.error('Failed to load logs');

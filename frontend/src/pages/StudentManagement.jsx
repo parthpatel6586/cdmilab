@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Plus, Search, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -23,7 +23,7 @@ const StudentManagement = () => {
 
   const fetchStudents = async () => {
     try {
-      const { data } = await axios.get('/api/students');
+      const { data } = await api.get('/api/students');
       setStudents(data);
     } catch (error) {
       toast.error('Failed to load students');
@@ -34,7 +34,7 @@ const StudentManagement = () => {
 
   const fetchBatches = async () => {
     try {
-      const { data } = await axios.get('/api/batches');
+      const { data } = await api.get('/api/batches');
       setBatches(data);
     } catch (error) {
       toast.error('Failed to load batches');
@@ -46,10 +46,10 @@ const StudentManagement = () => {
     if (!currentStudent.batch) return toast.error('Please select a batch');
     try {
       if (isEditing) {
-        await axios.put(`/api/students/${currentStudent._id}`, currentStudent);
+        await api.put(`/api/students/${currentStudent._id}`, currentStudent);
         toast.success('Student updated');
       } else {
-        await axios.post('/api/students', currentStudent);
+        await api.post('/api/students', currentStudent);
         toast.success('Student added');
       }
       setShowModal(false);
@@ -82,7 +82,7 @@ const StudentManagement = () => {
       const id = studentToDelete._id || studentToDelete.id;
       if (!id) throw new Error('Student ID not found');
       
-      await axios.delete(`/api/students/${id}`);
+      await api.delete(`/api/students/${id}`);
       toast.success('Student deleted successfully');
       setShowDeleteConfirm(false);
       setStudentToDelete(null);

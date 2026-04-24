@@ -7,7 +7,21 @@ const generateToken = (id) => {
     expiresIn: '30d',
   });
 };
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
+    // TEMP TEST (replace with DB logic later)
+    if (email === "admin@gmail.com" && password === "1234") {
+      return res.json({ success: true, message: "Login success" });
+    }
+
+    res.status(401).json({ success: false, message: "Invalid credentials" });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 // @desc    Auth admin & get token
 // @route   POST /api/auth/login
 // @access  Public

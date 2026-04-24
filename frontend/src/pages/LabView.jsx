@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { ArrowLeft, Monitor, User, Trash2, Settings, X, Search, Check, Laptop, Armchair, Info } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -35,7 +35,7 @@ const LabView = () => {
 
   const fetchBatches = async () => {
     try {
-      const { data } = await axios.get('/api/batches');
+      const { data } = await api.get('/api/batches');
       setBatches(data);
       if (data.length > 0 && !selectedBatchId) setSelectedBatchId(data[0]._id);
     } catch (error) {
@@ -45,7 +45,7 @@ const LabView = () => {
 
   const fetchLabDetails = async () => {
     try {
-      const { data } = await axios.get(`/api/labs/${id}?batchId=${selectedBatchId}`);
+      const { data } = await api.get(`/api/labs/${id}?batchId=${selectedBatchId}`);
       setLabData(data);
     } catch (error) {
       toast.error('Failed to load lab details');
@@ -56,7 +56,7 @@ const LabView = () => {
 
   const fetchStudents = async () => {
     try {
-      const { data } = await axios.get('/api/students');
+      const { data } = await api.get('/api/students');
       setStudents(data);
     } catch (error) {}
   };
@@ -76,7 +76,7 @@ const LabView = () => {
     e.preventDefault();
     if (!selectedStudentId) return toast.error('Please select a student');
     try {
-      await axios.put('/api/pc/assign', {
+      await api.put('/api/pc/assign', {
         pcId: selectedPC._id,
         studentId: selectedStudentId,
         batchId: selectedBatchId
@@ -93,7 +93,7 @@ const LabView = () => {
 
   const handleRemove = async () => {
     try {
-      await axios.put('/api/pc/remove', { pcId: selectedPC._id, batchId: selectedBatchId });
+      await api.put('/api/pc/remove', { pcId: selectedPC._id, batchId: selectedBatchId });
       toast.success('PC deallocated');
       setShowInfoModal(false);
       fetchLabDetails();
@@ -105,7 +105,7 @@ const LabView = () => {
 
   const updatePCCategory = async (category) => {
     try {
-      await axios.put('/api/pc/category', { pcId: selectedPC._id, category });
+      await api.put('/api/pc/category', { pcId: selectedPC._id, category });
       toast.success(`Category updated to ${category}`);
       setShowStatusModal(false);
       fetchLabDetails();

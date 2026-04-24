@@ -1,45 +1,47 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const morgan = require('morgan');
-const connectDB = require('./config/db');
-const { errorHandler } = require('./middleware/errorHandler');
-
-dotenv.config();
-
-connectDB();
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const { errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+
+// CORS — allow Vercel frontend and local dev
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    /\.vercel\.app$/,          // any *.vercel.app domain
+  ],
+  credentials: true,
+}));
+
+// DB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ DB Connected"))
+  .catch(err => console.log("❌ DB Error:", err));
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/students', require('./routes/studentRoutes'));
-app.use('/api/labs', require('./routes/labRoutes'));
-app.use('/api/batches', require('./routes/batchRoutes'));
-app.use('/api/pc', require('./routes/pcRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use("/api/auth",      require("./routes/authRoutes"));
+app.use("/api/students",  require("./routes/studentRoutes"));
+app.use("/api/batches",   require("./routes/batchRoutes"));
+app.use("/api/labs",      require("./routes/labRoutes"));
+app.use("/api/pc",        require("./routes/pcRoutes"));
+app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 
-// Root route
-app.get('/', (req, res) => {
-  res.send('API is running...');
+// Health-check
+app.get("/", (req, res) => {
+  res.send("CDMI API Running 🚀");
 });
 
 // Error Handler
 app.use(errorHandler);
 
+// Start server
 const PORT = process.env.PORT || 5000;
-
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-  });
-}
-
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});

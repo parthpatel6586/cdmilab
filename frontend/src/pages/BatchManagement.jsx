@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Plus, Clock, X, Monitor, Laptop, Armchair, Database, User } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -23,7 +23,7 @@ const BatchManagement = () => {
 
   const fetchBatches = async () => {
     try {
-      const { data } = await axios.get('/api/batches');
+      const { data } = await api.get('/api/batches');
       setBatches(data);
     } catch (error) {
       toast.error('Failed to load batches');
@@ -34,7 +34,7 @@ const BatchManagement = () => {
 
   const fetchLabs = async () => {
     try {
-      const { data } = await axios.get('/api/labs');
+      const { data } = await api.get('/api/labs');
       setLabs(data);
     } catch (error) {}
   };
@@ -47,7 +47,7 @@ const BatchManagement = () => {
       const allAllocations = [];
       
       for (const lab of labs) {
-        const { data } = await axios.get(`/api/labs/${lab._id}?batchId=${batch._id}`);
+        const { data } = await api.get(`/api/labs/${lab._id}?batchId=${batch._id}`);
         const pcsWithLab = data.pcs.map(p => ({ ...p, labName: lab.name }));
         allPcs.push(...pcsWithLab);
         allAllocations.push(...data.allocations);
@@ -65,7 +65,7 @@ const BatchManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/batches', newBatch);
+      await api.post('/api/batches', newBatch);
       toast.success('Batch created');
       setShowModal(false);
       setNewBatch({ name: '', startTime: '', endTime: '' });

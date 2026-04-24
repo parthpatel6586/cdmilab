@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, Monitor, Settings, LogOut, Database, Clock } from 'lucide-react';
+import { LayoutDashboard, Users, Monitor, Settings, LogOut, Database, Clock, FileText } from 'lucide-react';
 
 const Sidebar = ({ logout }) => {
   const menuItems = [
@@ -8,6 +8,7 @@ const Sidebar = ({ logout }) => {
     { name: 'Lab Management', icon: <Database size={20} />, path: '/labs' },
     { name: 'Student Management', icon: <Users size={20} />, path: '/students' },
     { name: 'Manage Batches', icon: <Clock size={20} />, path: '/batches' },
+    { name: 'Recent Logs', icon: <FileText size={20} />, path: '/logs' },
   ];
 
   return (

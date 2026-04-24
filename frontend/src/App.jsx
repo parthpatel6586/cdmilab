@@ -9,6 +9,7 @@ import StudentManagement from './pages/StudentManagement';
 import LabManagement from './pages/LabManagement';
 import LabView from './pages/LabView';
 import BatchManagement from './pages/BatchManagement';
+import ActivityLogs from './pages/ActivityLogs';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="batches" element={<BatchManagement />} />
             <Route path="labs" element={<LabManagement />} />
             <Route path="labs/:id" element={<LabView />} />
+            <Route path="logs" element={<ActivityLogs />} />
           </Route>
         </Routes>
       </AuthProvider>
